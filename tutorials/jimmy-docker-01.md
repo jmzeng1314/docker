@@ -158,7 +158,7 @@ PS：不推荐为运行中的容器创建镜像,换言之，不要使用``docker
 
 这里我们把上面用``docker commit``命令来创建镜像用dockerfile再来一次！
 
-```
+```shell
 FROM ubuntu
 MAINTAINER jianmingzeng<jmzeng1314@163.com>
 RUN apt -y update 
@@ -177,6 +177,23 @@ docker build -t="test" .
 > 需要保证运行命令的目录有一个文件叫做dockerfile，而且这个dockerfile里面存储的内容就是上面那些FROM,RUN,至于它们命令的意思，可以自己去搜索。如果想建立自己的镜像，需要学习的路还很长哦。
 
 可以查看docker images，发现本来基本的ubuntu只有117MB，我在此基础上面安装了几个小工具，就变成了427MB啦！
+
+### 删除镜像
+
+**1. 删除前需要保证容器是停止的  stop**
+
+**2. 需要注意删除镜像和容器的命令不一样。 docker rmi ID  ,其中 容器(rm)  和 镜像(rmi)**
+
+**3. 顺序需要先删除容器**，再删除镜像
+
+下面是清空docker的代码：
+
+```shell
+docker ps -a -q|xargs docker rm ## 批量删除所有的容器
+docker images -a -q|xargs docker rmi  ## 批量删除所有的镜像
+```
+
+
 
 ## 写在最后
 

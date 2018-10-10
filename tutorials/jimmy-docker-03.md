@@ -21,8 +21,6 @@ docker network ls
 
 > 首先进入下载一个镜像，并以此创建运行容器，这样就可以在容器里面操作它了，整理后就是自己的容器啦。
 
-
-
 ```shell
 sudo docker pull ubuntu
 docker run -it ubuntu    
@@ -31,11 +29,11 @@ cat /etc/issue.net
 uname -a 
 cat /etc/lsb-release 
 apt update && apt upgrade
-apt -y install wget curl g++ gcc make cmake  
-apt -y install bzip2 zip unzip  
-apt -y install zlib1g zlib1g-dev  libncurses5-dev  
+
+apt -y install wget curl g++ gcc make cmake  git 
+apt -y install bzip2 zip unzip  zlib1g zlib1g-dev  libncurses5-dev   
 apt -y install libbz2-dev liblzma-dev libssl-dev libbamtools-dev libcurl4-openssl-dev
-apt -y install git 
+ 
 mkdir -p /opt/
 cd /opt/
 git clone git://github.com/nygenome/lancet.git
@@ -54,15 +52,54 @@ exit
 
 ```
 docker images
-sudo docker commit ff5f5009cb28 ubuntu/jimmy
+sudo docker commit -a 'jimmy' -m ‘lancet:v1.0’ a0db8d411f52 jmzeng/lancet:v1.0
 docker images
 ```
 
-命令中，指定了要提交的修改过的容器的ID、目标镜像仓库、镜像名。commit提交的知识创建容器的镜像与容器的当前状态之间的差异部分，很轻量。
-
-还可以加入一些参数：
+提交镜像: 执行命令**提交镜像到本地**(这个跟git的其实是一样的,先提交镜像到本地,才能推送到你的远程镜像仓库,**一定要注意提交的镜像名格式 帐号/名字:如 jmzeng/lancet,否则无法推送**)  https://hub.docker.com/u/jmzeng/ 
+解释参数：
 
 - -m:提交的描述信息
 - -a:指定镜像作者
 
-PS：不推荐为运行中的容器创建镜像,换言之，不要使用``docker commit``命令来创建镜像。
+提交镜像到本地可以看到：
+
+```
+ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+jmzeng/lancet       v1.0                f86af09c0cc8        4 seconds ago       548MB
+ubuntu              latest              cd6d8154f1e1        4 weeks ago         84.1MB
+```
+
+这个`548MB`的就是需要上传到`docker hub`的， 上传需要登录自己的账号密码，执行命令: ` docker login` 登录你的 `hub.docker` 帐号 , 登录成功后就可以使用 来 提交自己自己好的镜像到远程仓库，这个时候就很考验网速啦。
+
+上传完毕就可以去   https://hub.docker.com/u/jmzeng/  里面查看是否成功。
+
+不过，好像大多数人更推荐直接使用`dockerfile`来构建镜像，所以我可以把上面的操作转换为 `dockerfile` 形式的。
+
+### 使用dockerfile创造lancet镜像
+
+代码也很简单，如下：
+
+```shell
+# Update the repository sources list
+RUN apt update && apt upgrade
+RUN apt -y install wget curl g++ gcc make cmake  git 
+RUN apt -y install bzip2 zip unzip  zlib1g zlib1g-dev  libncurses5-dev   
+RUN apt -y install libbz2-dev liblzma-dev libssl-dev libbamtools-dev libcurl4-openssl-dev
+ 
+RUN mkdir -p /opt/
+WORKDIR /opt/
+RUN git clone git://github.com/nygenome/lancet.git
+WORKDIR /opt/lancet
+RUN make
+RUN ln -s /opt/lancet/lancet /usr/bin/lancet
+RUN mkdir -p /test/
+WORKDIR /test/
+RUN mkdir -p /ref/
+```
+
+参考：http://wiki.jikexueyuan.com/project/docker/docker-hub/builds.html
+
+https://segmentfault.com/a/1190000012662268 
+
