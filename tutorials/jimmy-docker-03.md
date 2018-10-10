@@ -42,9 +42,10 @@ git clone git://github.com/nygenome/lancet.git
 cd lancet
 make
 ln -s /opt/lancet/lancet /usr/bin/lancet
-mkdir /test && cd  /test 
-wget 
-lancet --tumor t1.bam  --normal  n.bam  --ref  ref/Homo_sapiens_assembly38.fasta --reg  chr3:179230000-179240000 > t1.vcf 
+mkdir /test && cd  /test  
+mkdir ref 
+## https://console.cloud.google.com/storage/browser/genomics-public-data/resources/broad/hg38/v0?pli=1 
+# lancet --tumor t1.bam  --normal  n.bam  --ref  ref/Homo_sapiens_assembly38.fasta --reg  chr3:179230000-179240000 > t1.vcf 
 exit
 ```
 
