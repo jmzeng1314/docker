@@ -1,4 +1,4 @@
-# jimmy的docker教程（第二版）
+# jimmy的docker教程（第2讲）
 
 首先需要复习几个docker指令：
 
@@ -72,7 +72,7 @@ apt-get install libbamtools-dev
 apt-get install libcurl4-openssl-dev
 ```
 
-但是我为什么不自己创建一个成功的lanct镜像呢？
+但是我为什么不自己创建一个成功的`lancet镜像`呢？
 
 
 

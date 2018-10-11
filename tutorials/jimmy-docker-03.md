@@ -1,4 +1,4 @@
-# jimmy的docker教程（第三版）
+# jimmy的docker教程（第3讲）
 
 在第一讲我提到了创建docker容器的两种方式，正巧我想使用的一个容器，结果发现它是错误的，现在可以试试看自己创建这样的容器！
 
@@ -102,4 +102,15 @@ RUN mkdir -p /ref/
 参考：http://wiki.jikexueyuan.com/project/docker/docker-hub/builds.html
 
 https://segmentfault.com/a/1190000012662268 
+
+### 使用自己的镜像
+
+我制作的镜像是：` jmzeng/lancet:v1.0  ` 简单运行即可
+
+```
+docker run -it -v  /Users/jmzeng/data/project/ping_organoids/:/work_dir jmzeng/lancet:v1.0 /bin/bash 
+lancet --tumor T.bam --normal N.bam --ref ref.fa --reg 22:1-51304566 --num-threads 2 > out.vcf
+
+
+```
 
